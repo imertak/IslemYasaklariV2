@@ -58,24 +58,30 @@ public class IslemYasaklariServiceImpl implements IslemYasaklariService {
     }
 
     @Override
-    public void updateIslemYasaklari(String unvan ,int id){
-        IslemYasaklari islemYasaklari = islemYasaklariRepository.getById(id);
-        islemYasaklari.setUnvan(unvan);
-        islemYasaklariRepository.save(islemYasaklari);
+    public void updateIslemYasaklari(IslemYasaklariDto islemYasaklariDto, String unvan){
+        IslemYasaklari islemYasaklari = islemYasaklariRepository.findByUnvan(unvan);
+        islemYasaklari.setUnvan(islemYasaklariDto.getUnvan());
+        islemYasaklari.setKurulKararNo(islemYasaklariDto.getKurulKararNo());
+        islemYasaklari.setMkkSicilNo(islemYasaklariDto.getMkkSicilNo());
+        islemYasaklari.setPayKodu(islemYasaklariDto.getPayKodu());
+        islemYasaklari.setKurulKararTarihi(islemYasaklariDto.getKurulKararTarihi());
+
+        PayEntity payEntity = new PayEntity();
+        payEntity.setPayKodu(islemYasaklariDto.getPayKodu());
+        payEntity.setPay(islemYasaklariDto.getPay());
+
+        islemYasaklari.setPayEntity(payEntity);
+
     }
 
     @Override
-    public String deleteIslemYasaklari(String onay, int id){
+    public String deleteIslemYasaklari(String unvan){
         try{
-            //Postman'den "onay" text'i gelmeden silmez
-            if(onay.equals("onay")){
-                IslemYasaklari islemYasaklari = islemYasaklariRepository.getById(id);
-                islemYasaklariRepository.delete(islemYasaklari);
-                return "Başarılı";
-            }
-            else {
-                return "Başarısız";
-            }
+            System.out.println("delete işlemi başlıyor");
+            IslemYasaklari islemYasaklari = islemYasaklariRepository.findByUnvan(unvan);
+            islemYasaklariRepository.delete(islemYasaklari);
+            return "Başarılı";
+
         }catch (Exception exception){
             return ("Başarısız: "+ exception.getMessage());
         }

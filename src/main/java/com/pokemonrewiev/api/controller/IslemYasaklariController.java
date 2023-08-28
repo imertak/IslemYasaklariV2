@@ -7,6 +7,7 @@ import com.pokemonrewiev.api.mapper.IslemYasaklariMapper;
 import com.pokemonrewiev.api.repository.IslemYasaklariRepository;
 import com.pokemonrewiev.api.service.IslemYasaklariService;
 import com.pokemonrewiev.api.service.impl.IslemYasaklariServiceImpl;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+
 public class IslemYasaklariController {
 
 
@@ -82,25 +83,31 @@ public class IslemYasaklariController {
     @GetMapping("/get-db")
     public ResponseEntity<List<IslemYasaklariDto>> getIslemYasak(){
         List<IslemYasaklari> islemYasaklariList = islemYasaklariRepository.findAll();
-        return new ResponseEntity<>(islemYasaklariList.stream().map(i -> IslemYasaklariMapper.INSTANCE.mapToDto(i)).collect(Collectors.toList()), HttpStatus.OK
+        List<IslemYasaklariDto> islemYasaklariDtoList = islemYasaklariList.stream().map(i -> IslemYasaklariMapper.INSTANCE.mapToDto(i)).collect(Collectors.toList());
+        for(IslemYasaklariDto islemYasaklariDto: islemYasaklariDtoList){
+            for (IslemYasaklari islemYasaklari: islemYasaklariList){
+                islemYasaklariDto.setPayKodu(islemYasaklari.getPayEntity().getPay());
+            }
+        }
+
+        return new ResponseEntity<>(islemYasaklariDtoList, HttpStatus.OK
         );
     }
 
-    @PutMapping("update/{id}")
-    public String updateIslemYasaklari(@RequestBody String unvan, @PathVariable int id){
+    @PostMapping("update/{unvan}")
+    public String updateIslemYasaklari(@RequestBody IslemYasaklariDto islemYasaklariDto, @PathVariable String unvan){
         try {
-            islemYasaklariService.updateIslemYasaklari(unvan,id);
+            islemYasaklariService.updateIslemYasaklari(islemYasaklariDto,unvan);
+            System.out.println("update işlemi");
             return "Update Başarılı";
         }catch (Exception e){
             return "Update Başarısız";
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteIslemYasaklari(@RequestBody String onay, @PathVariable int id){
-        //Postman'den "onay" text'i gelmeden silmez
-        islemYasaklariService.deleteIslemYasaklari(onay, id);
-        return "Delete Başarılı";
+    @DeleteMapping("/delete/{unvan}")
+    public void deleteIslemYasaklari(@PathVariable String unvan){
+        islemYasaklariService.deleteIslemYasaklari(unvan);
     }
 
     @GetMapping("/detail/{id}")

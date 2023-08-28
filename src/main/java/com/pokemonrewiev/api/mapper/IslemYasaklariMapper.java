@@ -15,7 +15,7 @@ public interface IslemYasaklariMapper {
 
     @Mapping(source = "unvan", target = "unvan")
     @Mapping(source = "mkkSicilNo", target = "mkkSicilNo")
-    @Mapping(source = "payKodu", target = "payKodu")
+    @Mapping(source = "payEntity.payKodu", target = "payKodu")
     @Mapping(source = "kurulKararTarihi", target = "kurulKararTarihi")
     @Mapping(source = "kurulKararNo", target = "kurulKararNo")
     @Mapping(source = "payEntity.pay", target = "pay")
@@ -23,9 +23,10 @@ public interface IslemYasaklariMapper {
 
     @Mapping(source = "unvan", target = "unvan")
     @Mapping(source = "mkkSicilNo", target = "mkkSicilNo")
-    @Mapping(source = "payKodu", target = "payKodu")
+    @Mapping(source = "payKodu", target = "payEntity.payKodu")
     @Mapping(source = "kurulKararTarihi", target = "kurulKararTarihi")
     @Mapping(source = "kurulKararNo", target = "kurulKararNo")
+    @Mapping(source = "pay", target = "payEntity.pay")
     IslemYasaklari mapToEntity(IslemYasaklariDto islemYasaklariDto);
 
 

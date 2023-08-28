@@ -41,12 +41,15 @@ public class DemoSecurityConfig implements WebMvcConfigurer {
 
         httpSecurity.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers("/api/tum-yasaklar").permitAll()
-                        .requestMatchers("/api/get-db").permitAll()
+                        .requestMatchers("/api/tum-yasaklar").authenticated()
+                        .requestMatchers("/api/get-db").authenticated()
                         .requestMatchers("/api/add").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
+                        .requestMatchers("/api/delete/**").permitAll()
+                        .requestMatchers("/api/update/**").permitAll()
                         .anyRequest().authenticated()
+
         );
 
         // use HTTP Basic Authentication
@@ -63,22 +66,22 @@ public class DemoSecurityConfig implements WebMvcConfigurer {
         //        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        httpSecurity.cors();
         return httpSecurity.build();
     }
 
-    //@Bean
-    //public CorsConfigurationSource corsConfigurationSource() {
-    //    CorsConfiguration configuration = new CorsConfiguration();
-    //    configuration.addAllowedOrigin("http://localhost:3000"); // İzin verilen kök URL
-    //    configuration.addAllowedMethod("*"); // Tüm HTTP metotlarına izin ver
-    //    configuration.addAllowedHeader("*"); // Tüm başlıklara izin ver
-    //    configuration.setAllowCredentials(true); // Kimlik bilgisiyle istekleri destekle
-//
-    //    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    //    source.registerCorsConfiguration("/**", configuration);
-    //    return source;
-    //}
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000"); // İzin verilen kök URL
+        configuration.addAllowedMethod("*"); // Tüm HTTP metotlarına izin ver
+        configuration.addAllowedHeader("*"); // Tüm başlıklara izin ver
+        configuration.setAllowCredentials(true); // Kimlik bilgisiyle istekleri destekle
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
     @Bean

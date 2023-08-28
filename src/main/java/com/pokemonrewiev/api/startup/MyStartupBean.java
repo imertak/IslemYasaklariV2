@@ -58,9 +58,9 @@ public class MyStartupBean {
 
     @PostConstruct
     public void createIslemYasaklari(){
-        List<PayDto> payDtoList = payClient.getWebPay();
-        List<PayEntity> payList;
-        payList = payDtoList.stream().map(payDto -> payMapper.mapToEntity(payDto)).collect(Collectors.toList());
+
+        List<PayEntity> payList = payClient.getWebPay();
+        //payList = payDtoList.stream().map(payDto -> payMapper.mapToEntity(payDto)).collect(Collectors.toList());
 
         for(PayEntity payEntity: payList){
             List<PayEntity> newPay = payRepository.findListByPayKodu(payEntity.getPayKodu());
@@ -77,7 +77,6 @@ public class MyStartupBean {
         for (IslemYasaklari islemYasaklari: islemYasaklariList) {
             PayEntity payEntity = payRepository.findByPayKodu(islemYasaklari.getPayKodu());
             islemYasaklari.setPayEntity(payEntity);
-
         }
         islemYasaklariRepository.saveAll(islemYasaklariList);
 
