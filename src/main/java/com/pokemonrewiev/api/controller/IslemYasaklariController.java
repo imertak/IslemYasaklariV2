@@ -122,13 +122,10 @@ public class IslemYasaklariController {
     }
 
 
-    @PostMapping("/verify-token")
+    @PostMapping("/google")
     public ResponseEntity<String> verifyToken(@RequestBody ReCaptcha reCaptcha) {
         String reCAPTCHA_TOKEN = reCaptcha.getToken();
         String secretKey = reCaptcha.getSecretKey();
-
-        System.out.println(reCAPTCHA_TOKEN);
-        System.out.println(secretKey);
 
 
             RestTemplate restTemplate = new RestTemplate();

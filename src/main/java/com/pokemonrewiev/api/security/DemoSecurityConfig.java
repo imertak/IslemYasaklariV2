@@ -37,7 +37,7 @@ public class DemoSecurityConfig implements WebMvcConfigurer {
 
         httpSecurity.authorizeHttpRequests(configurer ->
                 configurer
-                        .requestMatchers("/api/verify-token").permitAll()
+                        .requestMatchers("/api/google").permitAll()
                         .requestMatchers("/api/tum-yasaklar").authenticated()
                         .requestMatchers("/api/get-db").authenticated()
                         .requestMatchers("/api/add").authenticated()
