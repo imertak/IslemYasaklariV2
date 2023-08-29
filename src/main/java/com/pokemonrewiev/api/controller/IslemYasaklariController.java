@@ -3,14 +3,14 @@ package com.pokemonrewiev.api.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pokemonrewiev.api.dto.IslemYasaklariDto;
 import com.pokemonrewiev.api.entity.IslemYasaklari;
+import com.pokemonrewiev.api.entity.ReCaptcha;
 import com.pokemonrewiev.api.mapper.IslemYasaklariMapper;
 import com.pokemonrewiev.api.repository.IslemYasaklariRepository;
 import com.pokemonrewiev.api.service.IslemYasaklariService;
 import com.pokemonrewiev.api.service.impl.IslemYasaklariServiceImpl;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -119,6 +119,30 @@ public class IslemYasaklariController {
     public ResponseEntity<IslemYasaklariDto> createDto(@RequestBody IslemYasaklariDto islemYasaklariDto){
         System.out.println("kayıt girişi");
         return new ResponseEntity<>(islemYasaklariService.createDto(islemYasaklariDto),HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/verify-token")
+    public ResponseEntity<String> verifyToken(@RequestBody ReCaptcha reCaptcha) {
+        String reCAPTCHA_TOKEN = reCaptcha.getToken();
+        String secretKey = reCaptcha.getSecretKey();
+
+        System.out.println(reCAPTCHA_TOKEN);
+        System.out.println(secretKey);
+
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            // İstek için URL ve verileri belirle
+            String url = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + reCAPTCHA_TOKEN;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON); // İstek içeriğinin türünü belirtiyoruz
+            String requestBody = "{\"secret\": \"secretKey\", \"response\": \"reCAPTCHA_TOKEN\"}";
+            HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+
+            // POST isteği yap
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            return response;
     }
 
 

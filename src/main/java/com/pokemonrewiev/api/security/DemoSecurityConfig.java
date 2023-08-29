@@ -12,14 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 
 @Configuration
@@ -41,9 +37,10 @@ public class DemoSecurityConfig implements WebMvcConfigurer {
 
         httpSecurity.authorizeHttpRequests(configurer ->
                 configurer
+                        .requestMatchers("/api/verify-token").permitAll()
                         .requestMatchers("/api/tum-yasaklar").authenticated()
                         .requestMatchers("/api/get-db").authenticated()
-                        .requestMatchers("/api/add").permitAll()
+                        .requestMatchers("/api/add").authenticated()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/delete/**").permitAll()
