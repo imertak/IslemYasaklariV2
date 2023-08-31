@@ -84,17 +84,10 @@ public class IslemYasaklariController {
     public ResponseEntity<List<IslemYasaklariDto>> getIslemYasak(){
         List<IslemYasaklari> islemYasaklariList = islemYasaklariRepository.findAll();
         List<IslemYasaklariDto> islemYasaklariDtoList = islemYasaklariList.stream().map(i -> IslemYasaklariMapper.INSTANCE.mapToDto(i)).collect(Collectors.toList());
-        for(IslemYasaklariDto islemYasaklariDto: islemYasaklariDtoList){
-            for (IslemYasaklari islemYasaklari: islemYasaklariList){
-                islemYasaklariDto.setPayKodu(islemYasaklari.getPayEntity().getPay());
-            }
-        }
-
-        return new ResponseEntity<>(islemYasaklariDtoList, HttpStatus.OK
-        );
+        return new ResponseEntity<>(islemYasaklariDtoList, HttpStatus.OK);
     }
 
-    @PostMapping("update/{unvan}")
+    @PutMapping("update/{unvan}")
     public String updateIslemYasaklari(@RequestBody IslemYasaklariDto islemYasaklariDto, @PathVariable String unvan){
         try {
             islemYasaklariService.updateIslemYasaklari(islemYasaklariDto,unvan);
@@ -106,8 +99,8 @@ public class IslemYasaklariController {
     }
 
     @DeleteMapping("/delete/{unvan}")
-    public void deleteIslemYasaklari(@PathVariable String unvan){
-        islemYasaklariService.deleteIslemYasaklari(unvan);
+    public String deleteIslemYasaklari(@PathVariable String unvan){
+        return islemYasaklariService.deleteIslemYasaklari(unvan);
     }
 
     @GetMapping("/detail/{id}")

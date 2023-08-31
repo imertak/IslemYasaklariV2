@@ -29,24 +29,4 @@ public interface IslemYasaklariMapper {
     @Mapping(source = "pay", target = "payEntity.pay")
     IslemYasaklari mapToEntity(IslemYasaklariDto islemYasaklariDto);
 
-
-    /*public IslemYasaklariDto maptoDto(IslemYasaklari islemYasaklari){
-        IslemYasaklariDto islemYasaklariDto = new IslemYasaklariDto();
-        islemYasaklariDto.setUnvan(islemYasaklari.getUnvan());
-        islemYasaklariDto.setMkkSicilNo(islemYasaklari.getMkkSicilNo());
-        islemYasaklariDto.setPayKodu(islemYasaklari.getPayKodu());
-        islemYasaklariDto.setKurulKararTarihi(islemYasaklari.getKurulKararTarihi());
-        islemYasaklariDto.setKurulKararNo(islemYasaklari.getKurulKararNo());
-        return islemYasaklariDto;
-    }
-
-    public IslemYasaklari mapToEntity(IslemYasaklariDto islemYasaklariDto){
-        IslemYasaklari islemYasaklari = new IslemYasaklari();
-        islemYasaklari.setUnvan(islemYasaklariDto.getUnvan());
-        islemYasaklari.setMkkSicilNo(islemYasaklariDto.getMkkSicilNo());
-        islemYasaklari.setPayKodu(islemYasaklariDto.getPayKodu());
-        islemYasaklari.setKurulKararTarihi(islemYasaklariDto.getKurulKararTarihi());
-        islemYasaklari.setKurulKararNo(islemYasaklariDto.getKurulKararNo());
-        return islemYasaklari;
-    }*/
 }

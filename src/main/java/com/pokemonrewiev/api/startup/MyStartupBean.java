@@ -71,7 +71,7 @@ public class MyStartupBean {
 
         List<IslemYasaklariDto> islemYasaklariDtoList = islemYasaklariClient.getWebIslemYasaklari();
         List<IslemYasaklari> islemYasaklariList;
-        islemYasaklariList = islemYasaklariDtoList.stream().map(y -> islemYasaklariMapper.mapToEntity(y)).collect(Collectors.toList());
+        islemYasaklariList = islemYasaklariDtoList.stream().map(y -> islemYasaklariMapper.INSTANCE.mapToEntity(y)).collect(Collectors.toList());
 
 
         for (IslemYasaklari islemYasaklari: islemYasaklariList) {

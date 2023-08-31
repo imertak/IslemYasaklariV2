@@ -1,10 +1,7 @@
 package com.pokemonrewiev.api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
@@ -12,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class IslemYasaklari {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

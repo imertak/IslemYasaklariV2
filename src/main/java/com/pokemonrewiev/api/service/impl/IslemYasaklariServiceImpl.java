@@ -61,25 +61,14 @@ public class IslemYasaklariServiceImpl implements IslemYasaklariService {
     public void updateIslemYasaklari(IslemYasaklariDto islemYasaklariDto, String unvan){
         IslemYasaklari islemYasaklari = islemYasaklariRepository.findByUnvan(unvan);
         islemYasaklari.setUnvan(islemYasaklariDto.getUnvan());
-        islemYasaklari.setKurulKararNo(islemYasaklariDto.getKurulKararNo());
-        islemYasaklari.setMkkSicilNo(islemYasaklariDto.getMkkSicilNo());
-        islemYasaklari.setPayKodu(islemYasaklariDto.getPayKodu());
-        islemYasaklari.setKurulKararTarihi(islemYasaklariDto.getKurulKararTarihi());
-
-        PayEntity payEntity = new PayEntity();
-        payEntity.setPayKodu(islemYasaklariDto.getPayKodu());
-        payEntity.setPay(islemYasaklariDto.getPay());
-
-        islemYasaklari.setPayEntity(payEntity);
-
+        islemYasaklariRepository.save(islemYasaklari);
     }
 
     @Override
     public String deleteIslemYasaklari(String unvan){
         try{
             System.out.println("delete işlemi başlıyor");
-            IslemYasaklari islemYasaklari = islemYasaklariRepository.findByUnvan(unvan);
-            islemYasaklariRepository.delete(islemYasaklari);
+            islemYasaklariRepository.delete(islemYasaklariRepository.findByUnvan(unvan));
             return "Başarılı";
 
         }catch (Exception exception){
@@ -97,7 +86,7 @@ public class IslemYasaklariServiceImpl implements IslemYasaklariService {
 
     @Override
     public IslemYasaklariDto createDto(IslemYasaklariDto islemYasaklariDto) {
-        IslemYasaklari islemYasaklari = islemYasaklariMapper.mapToEntity(islemYasaklariDto);
+        IslemYasaklari islemYasaklari = islemYasaklariMapper.INSTANCE.mapToEntity(islemYasaklariDto);
         List<PayEntity> payEntityList = payRepository.findAll();
         int counter=0;
         for (PayEntity payQuery: payEntityList){
