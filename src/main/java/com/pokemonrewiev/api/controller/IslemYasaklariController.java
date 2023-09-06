@@ -132,6 +132,7 @@ public class IslemYasaklariController {
 
             // POST isteği yap
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
             return response;
     }
 

@@ -3,8 +3,10 @@ package com.pokemonrewiev.api.service;
 import com.pokemonrewiev.api.client.IslemYasaklariClient;
 import com.pokemonrewiev.api.dto.IslemYasaklariDto;
 import com.pokemonrewiev.api.entity.IslemYasaklari;
+import com.pokemonrewiev.api.entity.PayEntity;
 import com.pokemonrewiev.api.mapper.IslemYasaklariMapper;
 import com.pokemonrewiev.api.repository.IslemYasaklariRepository;
+import com.pokemonrewiev.api.repository.PayRepository;
 import com.pokemonrewiev.api.service.impl.IslemYasaklariServiceImpl;
 import jakarta.inject.Inject;
 import org.apache.kafka.common.protocol.types.Field;
@@ -17,9 +19,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
+
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(MockitoExtension.class)
 public class IslemYasaklariServiceTests {
@@ -33,9 +39,11 @@ public class IslemYasaklariServiceTests {
     private IslemYasaklariMapper islemYasaklariMapper;
     @Mock
     private IslemYasaklariClient islemYasaklariClient;
+    @Mock
+    private PayRepository payRepository;
 
     @Test
-    public void should_ReturnIslemYAsaklariDto_when_CreateIslemYasaklariDto(){
+    public void should_ReturnIslemYasaklariDto_when_CreateIslemYasaklariDto(){
         IslemYasaklari islemYasaklari = IslemYasaklari.builder()
                 .unvan("test")
                 .kurulKararTarihi("test")
@@ -46,6 +54,7 @@ public class IslemYasaklariServiceTests {
 
         IslemYasaklariDto islemYasaklariDto = IslemYasaklariDto.builder()
                 .unvan("test")
+                .pay("test")
                 .kurulKararTarihi("test")
                 .payKodu("test")
                 .kurulKararNo("test")
@@ -61,6 +70,8 @@ public class IslemYasaklariServiceTests {
         Assertions.assertNotNull(islemYasaklariDtoSaved);
 
     }
+
+
 
     @Test
     public void shouldReturnDetailIslemYasaklariDtowhenGiveIslemYasaklariId(){

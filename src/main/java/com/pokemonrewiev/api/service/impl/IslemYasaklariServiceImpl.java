@@ -77,7 +77,8 @@ public class IslemYasaklariServiceImpl implements IslemYasaklariService {
     }
 
     @Override
-    public IslemYasaklariDto getDetail(int id){
+    public IslemYasaklariDto
+            getDetail(int id){
         IslemYasaklari islemYasaklari = islemYasaklariRepository.findById(id).orElseThrow(()->new IslemYasaklariNotFoundException("Islem Yasaklari Bulunamadı..."));
         IslemYasaklariDto islemYasaklariDto = new IslemYasaklariDto();
         islemYasaklariDto=islemYasaklariMapper.INSTANCE.mapToDto(islemYasaklari);

@@ -29,6 +29,22 @@ public class JWTGenerator {
 
     }
 
+    public String generateRefreshToken(Authentication authentication){
+        System.out.println("refresh token Oluşturuluyor");
+        String userName = authentication.getName();
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + SecurityConstants.REFRESH_EXPIRATION);
+
+        String token = Jwts.builder()
+                .setSubject(userName)
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS256,SecurityConstants.JWT_SECRET)
+                .compact();
+        return token;
+
+    }
+
 
     public String getUserNameFromJWT(String token){
         Claims claims = Jwts.parser()
