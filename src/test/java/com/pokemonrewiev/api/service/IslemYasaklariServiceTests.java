@@ -4,6 +4,7 @@ import com.pokemonrewiev.api.client.IslemYasaklariClient;
 import com.pokemonrewiev.api.dto.IslemYasaklariDto;
 import com.pokemonrewiev.api.entity.IslemYasaklari;
 import com.pokemonrewiev.api.entity.PayEntity;
+import com.pokemonrewiev.api.exceptions.IslemYasaklariNotFoundException;
 import com.pokemonrewiev.api.mapper.IslemYasaklariMapper;
 import com.pokemonrewiev.api.repository.IslemYasaklariRepository;
 import com.pokemonrewiev.api.repository.PayRepository;
@@ -20,11 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,31 +46,41 @@ public class IslemYasaklariServiceTests {
 
     @Test
     public void should_ReturnIslemYasaklariDto_when_CreateIslemYasaklariDto(){
+        PayEntity payEntity = PayEntity.builder()
+                .pay("test")
+                .payKodu("test")
+                .build();
         IslemYasaklari islemYasaklari = IslemYasaklari.builder()
                 .unvan("test")
+                .mkkSicilNo("test")
+                .kurulKararNo("test")
                 .kurulKararTarihi("test")
                 .payKodu("test")
-                .kurulKararNo("test")
-                .mkkSicilNo("test")
+                .payEntity(payEntity)
                 .build();
 
         IslemYasaklariDto islemYasaklariDto = IslemYasaklariDto.builder()
                 .unvan("test")
-                .pay("test")
+                .mkkSicilNo("test")
+                .kurulKararNo("test")
                 .kurulKararTarihi("test")
                 .payKodu("test")
-                .kurulKararNo("test")
-                .mkkSicilNo("test")
+                .pay("test")
                 .build();
 
-        when(islemYasaklariMapper.INSTANCE.mapToEntity(Mockito.any(IslemYasaklariDto.class))).thenReturn(islemYasaklari);
-        when(islemYasaklariRepository.save(Mockito.any(IslemYasaklari.class))).thenReturn(islemYasaklari);
+        List<PayEntity> payEntityList = new ArrayList<>();
+        payEntityList.add(payEntity);
 
+        when(payRepository.findAll()).thenReturn(payEntityList);
+        when(payRepository.findByPayKodu(islemYasaklari.getPayKodu())).thenReturn(payEntity);
 
-        IslemYasaklariDto islemYasaklariDtoSaved = islemYasaklariService.createDto(islemYasaklariDto);
+        IslemYasaklariDto savedIslemYasaklariDto = islemYasaklariService.createDto(islemYasaklariDto);
 
-        Assertions.assertNotNull(islemYasaklariDtoSaved);
+        Mockito.verify(payRepository, times(1)).findAll();
+        Mockito.verify(payRepository,times(1)).findByPayKodu(islemYasaklari.getPayKodu() );
+        Mockito.verify(islemYasaklariRepository,times(1)).save(any(IslemYasaklari.class));
 
+        Assertions.assertNotNull(savedIslemYasaklariDto);
     }
 
 
@@ -96,7 +108,7 @@ public class IslemYasaklariServiceTests {
 
 
         when(islemYasaklariRepository.findById(id)).thenReturn(Optional.ofNullable(islemYasaklari));
-        when(islemYasaklariMapper.INSTANCE.mapToDto(Mockito.any(IslemYasaklari.class))).thenReturn(islemYasaklariDto);
+
 
         IslemYasaklariDto islemYasaklariDtoSaved = islemYasaklariService.getDetail(id);
 
@@ -104,6 +116,37 @@ public class IslemYasaklariServiceTests {
         Assertions.assertEquals(islemYasaklariDtoSaved.getUnvan(),islemYasaklari.getUnvan());
     }
 
+    @Test
+    public void shouldUpdateIslemYasaklariwhenGiveNewUnvan(){
+        String unvan ="yeni unvan";
+        PayEntity payEntity = PayEntity.builder()
+                .pay("test")
+                .payKodu("test")
+                .build();
+        IslemYasaklari islemYasaklari = IslemYasaklari.builder()
+                .unvan("test")
+                .mkkSicilNo("test")
+                .kurulKararNo("test")
+                .kurulKararTarihi("test")
+                .payKodu("test")
+                .payEntity(payEntity)
+                .build();
+        IslemYasaklariDto islemYasaklariDto = IslemYasaklariDto.builder()
+                .unvan("yeni unvan")
+                .kurulKararTarihi("test")
+                .payKodu("test")
+                .kurulKararNo("test")
+                .mkkSicilNo("test")
+                .build();
+
+
+        when(islemYasaklariRepository.findByUnvan(any())).thenReturn(islemYasaklari);
+
+        islemYasaklariService.updateIslemYasaklari(islemYasaklariDto,unvan);
+
+        Assertions.assertEquals(islemYasaklari.getUnvan(),unvan);
+
+    }
 
 
 }

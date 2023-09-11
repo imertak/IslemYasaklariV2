@@ -42,8 +42,6 @@ public class DemoSecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/get-db").authenticated()
                         .requestMatchers("/api/add").authenticated()
                         .requestMatchers("/api/auth/**").permitAll()
-                        //.requestMatchers("/api/auth/register").permitAll()
-                        //.requestMatchers("/api/auth/refreshToken").permitAll()
                         .requestMatchers("/api/delete/**").permitAll()
                         .requestMatchers("/api/update/**").permitAll()
                         .requestMatchers("/user/get/**").permitAll()

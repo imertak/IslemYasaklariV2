@@ -3,7 +3,6 @@ package com.pokemonrewiev.api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Data
 @Entity
 @AllArgsConstructor
